@@ -1,0 +1,8 @@
+Multiple Disease Prediction - Project 
+
+1.Add all .csv dataset files and then download the .sav i.e. saved file
+2.Rule of thumb
+
+For Conda/virtual environments, I recommend:
+
+python -m streamlit run app.py
