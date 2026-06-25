@@ -315,9 +315,15 @@ st.markdown("""
   }
   .disclaimer strong { color: #FFC107; }
 
-  /* ── Hide Streamlit chrome ── */
-  #MainMenu, footer, header { visibility: hidden; }
-  .stDeployButton { display: none; }
+/* ── Hide Streamlit chrome ── */
+#MainMenu,
+footer {
+    visibility: hidden;
+}
+
+.stDeployButton {
+    display: none;
+}
 
   /* ── Option menu override ── */
   .nav-link {
@@ -334,18 +340,7 @@ st.markdown("""
 
 
 # ── Model loading ─────────────────────────────────────────────────────────────
-'''working_dir = os.path.dirname(os.path.abspath(__file__))
 
-@st.cache_resource
-def load_models():
-    base = 'D:/Project 1 - Multiple Disease Prediction/multiple-disease-prediction-streamlit-app/saved_models/'
-    return {
-        'diabetes':      pickle.load(open(base + 'diabetes_model.sav', 'rb')),
-        'heart_disease': pickle.load(open(base + 'heart_disease_model.sav', 'rb')),
-        'parkinsons':    pickle.load(open(base + 'parkinsons_model.sav', 'rb')),
-    }
-
-models = load_models()'''
 
 from pathlib import Path
 
