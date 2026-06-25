@@ -334,7 +334,7 @@ st.markdown("""
 
 
 # ── Model loading ─────────────────────────────────────────────────────────────
-working_dir = os.path.dirname(os.path.abspath(__file__))
+'''working_dir = os.path.dirname(os.path.abspath(__file__))
 
 @st.cache_resource
 def load_models():
@@ -343,6 +343,20 @@ def load_models():
         'diabetes':      pickle.load(open(base + 'diabetes_model.sav', 'rb')),
         'heart_disease': pickle.load(open(base + 'heart_disease_model.sav', 'rb')),
         'parkinsons':    pickle.load(open(base + 'parkinsons_model.sav', 'rb')),
+    }
+
+models = load_models()'''
+
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent
+
+@st.cache_resource
+def load_models():
+    return {
+        "diabetes": pickle.load(open(BASE_DIR / "diabetes_model.sav", "rb")),
+        "heart_disease": pickle.load(open(BASE_DIR / "heart_disease_model.sav", "rb")),
+        "parkinsons": pickle.load(open(BASE_DIR / "parkinsons_model.sav", "rb")),
     }
 
 models = load_models()
