@@ -327,7 +327,7 @@ st.markdown("""
 
 
 # ── Model loading ─────────────────────────────────────────────────────────────
-working_dir = os.path.dirname(os.path.abspath(__file__))
+'''working_dir = os.path.dirname(os.path.abspath(__file__))
 
 @st.cache_resource
 def load_models():
@@ -338,8 +338,25 @@ def load_models():
         'parkinsons':    pickle.load(open(base + 'parkinsons_model.sav', 'rb')),
     }
 
-models = load_models()
+models = load_models()'''
 
+working_dir = os.path.dirname(os.path.abspath(__file__))
+
+@st.cache_resource
+def load_models():
+    return {
+        'diabetes': pickle.load(
+            open(os.path.join(working_dir, 'diabetes_model.sav'), 'rb')
+        ),
+        'heart_disease': pickle.load(
+            open(os.path.join(working_dir, 'heart_disease_model.sav'), 'rb')
+        ),
+        'parkinsons': pickle.load(
+            open(os.path.join(working_dir, 'parkinsons_model.sav'), 'rb')
+        ),
+    }
+
+models = load_models()
 
 # ── Sidebar ───────────────────────────────────────────────────────────────────
 with st.sidebar:
