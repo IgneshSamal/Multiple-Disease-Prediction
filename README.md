@@ -15,7 +15,7 @@ The trained models are serialized and integrated into a Streamlit application fo
 ## 🚀 Live Demo
 
 🌐 **Streamlit App:**  
-https://multiple-disease-predictionml.streamlit.app/
+https://multiple-disease-prediction-2e8vrv2rymtnu8sjrfq7gf.streamlit.app/
 
 ---
 
