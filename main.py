@@ -327,12 +327,15 @@ st.markdown("""
 
 
 # ── Model loading ─────────────────────────────────────────────────────────────
-
-
 working_dir = os.path.dirname(os.path.abspath(__file__))
 
 @st.cache_resource
 def load_models():
+
+    parkinsons_data = pickle.load(
+        open(os.path.join(working_dir, 'parkinsons_model.sav'), 'rb')
+    )
+
     return {
         'diabetes': pickle.load(
             open(os.path.join(working_dir, 'diabetes_model.sav'), 'rb')
@@ -340,9 +343,8 @@ def load_models():
         'heart_disease': pickle.load(
             open(os.path.join(working_dir, 'heart_disease_model.sav'), 'rb')
         ),
-        'parkinsons': pickle.load(
-            open(os.path.join(working_dir, 'parkinsons_model.sav'), 'rb')
-        ),
+        'parkinsons': parkinsons_data['model'],
+        'parkinsons_scaler': parkinsons_data['scaler']
     }
 
 models = load_models()
@@ -566,7 +568,7 @@ elif selected == "Parkinson's":
 
     st.markdown("""
     <div class="page-hero">
-      <div class="hero-badge">Model · SVM · Voice Biomarker Analysis</div>
+      <div class="hero-badge">Model · Selected ML Classifier · Voice Biomarker Analysis</div>
       <h1>Parkinson's <span>Disease Prediction</span></h1>
       <p>Provide 22 sustained phonation (voice recording) features. The model detects
          dysphonia patterns that are early indicators of Parkinson's disease.</p>
@@ -578,7 +580,7 @@ elif selected == "Parkinson's":
     <div class="stat-row">
       <div class="stat-pill"><div class="stat-val">195</div><div class="stat-lbl">Training Samples</div></div>
       <div class="stat-pill"><div class="stat-val">22</div><div class="stat-lbl">Voice Features</div></div>
-      <div class="stat-pill"><div class="stat-val">~87%</div><div class="stat-lbl">Accuracy</div></div>
+      <div class="stat-pill"><div class="stat-val">Recall</div><div class="stat-lbl">Primary Metric</div></div>
       <div class="stat-pill"><div class="stat-val">Oxford</div><div class="stat-lbl">Dataset</div></div>
     </div>
     """, unsafe_allow_html=True)
@@ -633,7 +635,11 @@ elif selected == "Parkinson's":
                 APQ3, APQ5, APQ, DDA, NHR, HNR,
                 RPDE, DFA, spread1, spread2, D2, PPE
             ]]
-            pred = models['parkinsons'].predict([user_input])[0]
+            # Scale input using the same scaler used during training
+            user_input_scaled = models['parkinsons_scaler'].transform([user_input])
+
+            # Predict using the selected best model
+            pred = models['parkinsons'].predict(user_input_scaled)[0]
             show_result(
                 pred == 1,
                 positive_msg="Dysphonia patterns consistent with Parkinson's disease detected.",
