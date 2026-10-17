@@ -349,16 +349,7 @@ def load_models():
 
 models = load_models()
 #add checker
-# Temporary debugging code
-st.write("Diabetes model type:", type(models['diabetes']))
-st.write("Heart disease model type:", type(models['heart_disease']))
-st.write("Parkinson's model type:", type(models['parkinsons']))
-
-st.write(
-    "Diabetes model supports predict:",
-    hasattr(models['diabetes'], 'predict')
-)
-
+st.write("Diabetes model keys:", list(models['diabetes'].keys()))
 
 
 # ── Sidebar ───────────────────────────────────────────────────────────────────
