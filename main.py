@@ -329,27 +329,33 @@ st.markdown("""
 # ── Model loading ─────────────────────────────────────────────────────────────
 working_dir = os.path.dirname(os.path.abspath(__file__))
 
+
 @st.cache_resource
 def load_models():
+    # Load saved model files
+    diabetes_data = pickle.load(
+        open(os.path.join(working_dir, 'diabetes_model.sav'), 'rb')
+    )
+
+    heart_data = pickle.load(
+        open(os.path.join(working_dir, 'heart_disease_model.sav'), 'rb')
+    )
 
     parkinsons_data = pickle.load(
         open(os.path.join(working_dir, 'parkinsons_model.sav'), 'rb')
     )
 
     return {
-        'diabetes': pickle.load(
-            open(os.path.join(working_dir, 'diabetes_model.sav'), 'rb')
-        ),
-        'heart_disease': pickle.load(
-            open(os.path.join(working_dir, 'heart_disease_model.sav'), 'rb')
-        ),
+        'diabetes': diabetes_data['model'],
+        'diabetes_scaler': diabetes_data['scaler'],
+        'heart_disease': heart_data['model'],
+        'heart_disease_scaler': heart_data['scaler'],
         'parkinsons': parkinsons_data['model'],
         'parkinsons_scaler': parkinsons_data['scaler']
     }
 
 models = load_models()
-#add checker
-st.write("Diabetes model keys:", list(models['diabetes'].keys()))
+
 
 
 # ── Sidebar ───────────────────────────────────────────────────────────────────
@@ -475,7 +481,9 @@ if selected == 'Diabetes':
                 Pregnancies, Glucose, BloodPressure, SkinThickness,
                 Insulin, BMI, DiabetesPedigreeFunction, Age
             ]]
-            pred = models['diabetes'].predict([user_input])[0]
+           # pred = models['diabetes'].predict([user_input])[0]
+            user_input_scaled = models['diabetes_scaler'].transform([user_input])
+            pred = models['diabetes'].predict(user_input_scaled)[0]
             show_result(
                 pred == 1,
                 positive_msg="High likelihood of Diabetes Mellitus detected.",
@@ -550,7 +558,9 @@ elif selected == 'Heart Disease':
                 age, sex, cp, trestbps, chol, fbs,
                 restecg, thalach, exang, oldpeak, slope, ca, thal
             ]]
-            pred = models['heart_disease'].predict([user_input])[0]
+            #pred = models['heart_disease'].predict([user_input])[0]
+            user_input_scaled = models['heart_disease_scaler'].transform([user_input])
+            pred = models['heart_disease'].predict(user_input_scaled)[0]
             show_result(
                 pred == 1,
                 positive_msg="Indicators of coronary artery disease detected.",
